@@ -1,10 +1,9 @@
-FROM eclipse-temurin:25-jdk AS builder
+FROM maven:3.9.9-eclipse-temurin-25 AS builder
 WORKDIR /app
-COPY mvnw pom.xml ./
-COPY .mvn .mvn
-RUN ./mvnw dependency:go-offline --no-transfer-progress
+COPY pom.xml ./
+RUN mvn dependency:go-offline --no-transfer-progress
 COPY src src
-RUN ./mvnw package -DskipTests --no-transfer-progress
+RUN mvn package -DskipTests --no-transfer-progress
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
