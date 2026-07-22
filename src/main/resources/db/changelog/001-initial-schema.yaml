@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: mburgas
+      changes:
+        - sql:
+            comment: Enable PostGIS extension
+            sql: CREATE EXTENSION IF NOT EXISTS postgis;
+      rollback:
+        - sql: DROP EXTENSION IF EXISTS postgis;
