@@ -22,17 +22,6 @@ public class AdminController {
         return ResponseEntity.ok(suggestionService.getAll());
     }
 
-    @PutMapping("/suggestions/{id}/status")
-    public ResponseEntity<?> updateSuggestionStatus(@PathVariable UUID id,
-                                                     @RequestBody Map<String, String> body) {
-        String status = body.get("status");
-        if (status == null || (!status.equals("PENDING") && !status.equals("READ") && !status.equals("RESOLVED"))) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Invalid status. Use PENDING, READ, or RESOLVED"));
-        }
-        Suggestion suggestion = suggestionService.updateStatus(id, status);
-        return ResponseEntity.ok(Map.of("id", suggestion.getId(), "status", suggestion.getStatus()));
-    }
-
     @DeleteMapping("/suggestions/{id}")
     public ResponseEntity<?> deleteSuggestion(@PathVariable UUID id) {
         suggestionService.delete(id);

@@ -10,9 +10,8 @@ import com.mcc.api.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,7 @@ public class UserController {
     private final LocationRepository locationRepository;
     private final CardAcceptanceRepository cardAcceptanceRepository;
     private final LocationService locationService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/me")
     public ResponseEntity<?> getMe(Authentication authentication) {
@@ -53,5 +53,35 @@ public class UserController {
                 "locations", locationResponses,
                 "acceptanceCount", acceptanceCount
         ));
+    }
+
+    @PutMapping("/me/password")
+    public ResponseEntity<?> changePassword(Authentication authentication,
+                                            @RequestBody Map<String, String> body) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(404).body(Map.of("error", "User not found"));
+        }
+
+        String currentPassword = body.get("currentPassword");
+        String newPassword = body.get("newPassword");
+
+        if (currentPassword == null || newPassword == null || newPassword.length() < 6) {
+            return ResponseEntity.badRequest().body(Map.of("error", "New password must be at least 6 characters"));
+        }
+
+        if (user.getPasswordHash() == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Cannot change password. Use Google login."));
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            return ResponseEntity.status(401).body(Map.of("error", "Current password is incorrect"));
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "Password updated"));
     }
 }

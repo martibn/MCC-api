@@ -22,7 +22,6 @@ public class SuggestionService {
     public Suggestion create(String message, UUID userId) {
         Suggestion suggestion = new Suggestion();
         suggestion.setMessage(message);
-        suggestion.setStatus("PENDING");
         if (userId != null) {
             User user = userRepository.findById(userId).orElse(null);
             suggestion.setUser(user);
@@ -33,14 +32,6 @@ public class SuggestionService {
     @Transactional(readOnly = true)
     public List<Suggestion> getAll() {
         return suggestionRepository.findAllByOrderByCreatedAtDesc();
-    }
-
-    @Transactional
-    public Suggestion updateStatus(UUID id, String status) {
-        Suggestion suggestion = suggestionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Suggestion not found: " + id));
-        suggestion.setStatus(status);
-        return suggestionRepository.save(suggestion);
     }
 
     @Transactional
