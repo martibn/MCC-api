@@ -5,10 +5,11 @@ import com.mcc.api.model.User;
 import com.mcc.api.repository.SuggestionRepository;
 import com.mcc.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,8 +31,11 @@ public class SuggestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Suggestion> getAll() {
-        return suggestionRepository.findAllByOrderByCreatedAtDesc();
+    public Page<Suggestion> getAll(String search, Pageable pageable) {
+        if (search != null && !search.isBlank()) {
+            return suggestionRepository.findByMessageContainingIgnoreCase(search, pageable);
+        }
+        return suggestionRepository.findAll(pageable);
     }
 
     @Transactional

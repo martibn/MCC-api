@@ -3,11 +3,12 @@ package com.mcc.api.controller;
 import com.mcc.api.model.Suggestion;
 import com.mcc.api.service.SuggestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -18,8 +19,12 @@ public class AdminController {
     private final SuggestionService suggestionService;
 
     @GetMapping("/suggestions")
-    public ResponseEntity<List<Suggestion>> getSuggestions() {
-        return ResponseEntity.ok(suggestionService.getAll());
+    public ResponseEntity<Page<Suggestion>> getSuggestions(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return ResponseEntity.ok(suggestionService.getAll(search, pageRequest));
     }
 
     @DeleteMapping("/suggestions/{id}")
