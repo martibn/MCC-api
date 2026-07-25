@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/001-initial-schema.yaml
   - include:
       file: db/changelog/002-multiple-categories.yaml
+  - include:
+      file: db/changelog/003-card-types-suggestions.yaml
+  - include:
+      file: db/changelog/004-user-role.yaml

@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: mburgas
+      changes:
+        - sql:
+            sql: CREATE TABLE IF NOT EXISTS card_types (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, name VARCHAR(50) NOT NULL UNIQUE, enabled BOOLEAN DEFAULT TRUE NOT NULL, created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL)
+        - sql:
+            sql: INSERT INTO card_types (name) VALUES ('PAYFLOW'), ('FLEXOH') ON CONFLICT (name) DO NOTHING
+
+  - changeSet:
+      id: 9
+      author: mburgas
+      changes:
+        - sql:
+            sql: CREATE TABLE IF NOT EXISTS suggestions (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, user_id UUID REFERENCES users(id), message TEXT NOT NULL, status VARCHAR(20) DEFAULT 'PENDING' NOT NULL, created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL)

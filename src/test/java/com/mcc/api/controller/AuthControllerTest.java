@@ -40,7 +40,7 @@ class AuthControllerTest {
     @Test
     void register_success() throws Exception {
         UUID userId = UUID.randomUUID();
-        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "access-token", "refresh-token");
+        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "USER", "access-token", "refresh-token");
         when(authService.register(any(RegisterRequest.class))).thenReturn(response);
 
         RegisterRequest request = new RegisterRequest();
@@ -113,7 +113,7 @@ class AuthControllerTest {
     @Test
     void login_success() throws Exception {
         UUID userId = UUID.randomUUID();
-        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "access-token", "refresh-token");
+        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "USER", "access-token", "refresh-token");
         when(authService.login(any(LoginRequest.class))).thenReturn(response);
 
         LoginRequest request = new LoginRequest();
@@ -156,7 +156,7 @@ class AuthControllerTest {
     @Test
     void refresh_success() throws Exception {
         UUID userId = UUID.randomUUID();
-        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "new-access", "new-refresh");
+        AuthResponse response = new AuthResponse(userId, "test@example.com", "Test", null, "USER", "new-access", "new-refresh");
         when(authService.refresh(any(RefreshTokenRequest.class))).thenReturn(response);
 
         RefreshTokenRequest request = new RefreshTokenRequest();

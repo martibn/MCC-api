@@ -10,5 +10,7 @@ import java.util.UUID;
 public interface CardAcceptanceRepository extends JpaRepository<CardAcceptance, UUID> {
     List<CardAcceptance> findByLocation(Location location);
     List<CardAcceptance> findByLocationId(UUID locationId);
+    List<CardAcceptance> findByReportedById(UUID userId);
+    long countByReportedById(UUID userId);
     boolean existsByLocationIdAndCardTypeAndWorks(UUID locationId, String cardType, Boolean works);
 }

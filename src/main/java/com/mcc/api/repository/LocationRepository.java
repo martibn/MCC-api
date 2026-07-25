@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LocationRepository extends JpaRepository<Location, UUID> {
+    List<Location> findByCreatedById(UUID createdById);
 
     @Query(value = "SELECT * FROM locations WHERE ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography, :radiusMeters)", nativeQuery = true)
     List<Location> findWithinRadius(@Param("lat") double lat, @Param("lng") double lng, @Param("radiusMeters") double radiusMeters);

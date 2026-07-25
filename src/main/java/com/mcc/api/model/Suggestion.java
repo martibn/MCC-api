@@ -9,29 +9,25 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "card_acceptances")
+@Table(name = "suggestions")
 @Getter
 @Setter
 @NoArgsConstructor
-public class CardAcceptance {
+public class Suggestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", nullable = false)
-    private Location location;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "card_type", nullable = false, length = 50)
-    private String cardType;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String message;
 
-    @Column(nullable = false)
-    private Boolean works;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reported_by")
-    private User reportedBy;
+    @Column(nullable = false, length = 20)
+    private String status = "PENDING";
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

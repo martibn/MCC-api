@@ -3,7 +3,7 @@ package com.mcc.api.controller;
 import com.mcc.api.dto.response.CardAcceptanceResponse;
 import com.mcc.api.exception.ResourceNotFoundException;
 import com.mcc.api.exception.GlobalExceptionHandler;
-import com.mcc.api.model.CardType;
+
 import com.mcc.api.service.CardAcceptanceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class CardAcceptanceControllerTest {
     void getByLocation_found() throws Exception {
         UUID locId = UUID.randomUUID();
         UUID acceptanceId = UUID.randomUUID();
-        CardAcceptanceResponse resp = new CardAcceptanceResponse(acceptanceId, CardType.FLEXOH.name(), true, Instant.now());
+        CardAcceptanceResponse resp = new CardAcceptanceResponse(acceptanceId, "FLEXOH", true, Instant.now());
         when(cardAcceptanceService.getByLocation(locId)).thenReturn(List.of(resp));
 
         mockMvc.perform(get("/locations/" + locId + "/acceptances"))

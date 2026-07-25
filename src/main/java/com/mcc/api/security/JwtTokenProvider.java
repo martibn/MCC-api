@@ -28,10 +28,11 @@ public class JwtTokenProvider {
         this.refreshExpirationMs = refreshExpirationMs;
     }
 
-    public String generateAccessToken(UUID userId, String email) {
+    public String generateAccessToken(UUID userId, String email, String role) {
         return Jwts.builder()
                 .subject(userId.toString())
                 .claim("email", email)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + accessExpirationMs))
                 .signWith(accessSecretKey)
@@ -49,6 +50,11 @@ public class JwtTokenProvider {
 
     public UUID getUserIdFromAccessToken(String token) {
         return UUID.fromString(parseClaims(token, accessSecretKey).getSubject());
+    }
+
+    public String getRoleFromAccessToken(String token) {
+        Claims claims = parseClaims(token, accessSecretKey);
+        return claims.get("role", String.class);
     }
 
     public UUID getUserIdFromRefreshToken(String token) {

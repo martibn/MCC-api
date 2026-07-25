@@ -116,7 +116,8 @@ public class AuthService {
                 user.getEmail(),
                 user.getName(),
                 user.getAvatarUrl(),
-                jwtTokenProvider.generateAccessToken(user.getId(), user.getEmail()),
+                user.getRole().name(),
+                jwtTokenProvider.generateAccessToken(user.getId(), user.getEmail(), user.getRole().name()),
                 jwtTokenProvider.generateRefreshToken(user.getId())
         );
     }

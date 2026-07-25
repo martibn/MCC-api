@@ -56,7 +56,7 @@ public class CardAcceptanceService {
     private CardAcceptanceResponse toResponse(CardAcceptance acceptance) {
         return new CardAcceptanceResponse(
                 acceptance.getId(),
-                acceptance.getCardType().name(),
+                acceptance.getCardType(),
                 acceptance.getWorks(),
                 acceptance.getCreatedAt()
         );

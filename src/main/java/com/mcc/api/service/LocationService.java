@@ -103,10 +103,10 @@ public class LocationService {
                 .toList();
     }
 
-    private LocationResponse toResponse(Location location) {
+    public LocationResponse toResponse(Location location) {
         List<CardAcceptance> acceptances = cardAcceptanceRepository.findByLocation(location);
         List<CardAcceptanceResponse> acceptanceResponses = acceptances.stream()
-                .map(a -> new CardAcceptanceResponse(a.getId(), a.getCardType().name(), a.getWorks(), a.getCreatedAt()))
+                .map(a -> new CardAcceptanceResponse(a.getId(), a.getCardType(), a.getWorks(), a.getCreatedAt()))
                 .toList();
 
         return new LocationResponse(

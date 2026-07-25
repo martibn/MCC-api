@@ -38,6 +38,10 @@ public class User {
     @Column(name = "provider_id")
     private String providerId;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Role role = Role.USER;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
