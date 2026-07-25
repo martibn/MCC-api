@@ -37,37 +37,11 @@ public class SuggestionController {
             userId = (UUID) authentication.getPrincipal();
         }
 
-        try {
-            String algorithm = extractField(altchaPayload, "algorithm");
-            String challenge = extractField(altchaPayload, "challenge");
-            String salt = extractField(altchaPayload, "salt");
-            int number = Integer.parseInt(extractField(altchaPayload, "number"));
-            String signature = extractField(altchaPayload, "signature");
-            if (!altchaService.verifyPayload(algorithm, challenge, salt, number, signature)) {
-                return ResponseEntity.badRequest().body(Map.of("error", "CAPTCHA verification failed"));
-            }
-
-            Suggestion suggestion = suggestionService.create(message, userId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", suggestion.getId()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        if (!altchaService.verifyPayload(altchaPayload)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "CAPTCHA verification failed"));
         }
-    }
 
-    private String extractField(String json, String key) {
-        String search = "\"" + key + "\":\"";
-        int start = json.indexOf(search);
-        if (start < 0) {
-            search = "\"" + key + "\":";
-            start = json.indexOf(search);
-            if (start < 0) throw new IllegalArgumentException("Missing field: " + key);
-            start += search.length();
-            int end = json.indexOf(",", start);
-            if (end < 0) end = json.indexOf("}", start);
-            return json.substring(start, end).trim();
-        }
-        start += search.length();
-        int end = json.indexOf("\"", start);
-        return json.substring(start, end);
+        Suggestion suggestion = suggestionService.create(message, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id", suggestion.getId()));
     }
 }
