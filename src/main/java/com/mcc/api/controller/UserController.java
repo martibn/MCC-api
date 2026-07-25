@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,16 +44,17 @@ public class UserController {
 
         long acceptanceCount = cardAcceptanceRepository.countByReportedById(userId);
 
-        return ResponseEntity.ok(Map.of(
-                "id", user.getId(),
-                "email", user.getEmail(),
-                "name", user.getName(),
-                "avatarUrl", user.getAvatarUrl(),
-                "role", user.getRole().name(),
-                "createdAt", user.getCreatedAt(),
-                "locations", locationResponses,
-                "acceptanceCount", acceptanceCount
-        ));
+        Map<String, Object> body = new HashMap<>();
+        body.put("id", user.getId());
+        body.put("email", user.getEmail());
+        body.put("name", user.getName());
+        body.put("avatarUrl", user.getAvatarUrl());
+        body.put("role", user.getRole().name());
+        body.put("createdAt", user.getCreatedAt());
+        body.put("locations", locationResponses);
+        body.put("acceptanceCount", acceptanceCount);
+
+        return ResponseEntity.ok(body);
     }
 
     @PutMapping("/me/password")
