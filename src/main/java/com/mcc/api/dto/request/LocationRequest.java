@@ -2,9 +2,12 @@ package com.mcc.api.dto.request;
 
 import com.mcc.api.model.ServiceCategory;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +20,6 @@ public class LocationRequest {
     private Double lat;
     @NotNull
     private Double lng;
-    @NotNull
-    private ServiceCategory category;
+    @NotEmpty
+    private List<ServiceCategory> categories;
 }

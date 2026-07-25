@@ -18,7 +18,7 @@ public class LocationResponse {
     private String address;
     private Double lat;
     private Double lng;
-    private ServiceCategory serviceCategory;
+    private List<ServiceCategory> categories;
     private Instant createdAt;
     private Instant updatedAt;
     private List<CardAcceptanceResponse> acceptances;

@@ -40,7 +40,7 @@ public class LocationService {
         location.setName(request.getName());
         location.setAddress(request.getAddress());
         location.setLocation(GEOMETRY_FACTORY.createPoint(new Coordinate(request.getLng(), request.getLat())));
-        location.setServiceCategory(request.getCategory());
+        location.setCategories(request.getCategories());
         location.setCreatedBy(user);
 
         location = locationRepository.save(location);
@@ -66,7 +66,8 @@ public class LocationService {
         location.setName(request.getName());
         location.setAddress(request.getAddress());
         location.setLocation(GEOMETRY_FACTORY.createPoint(new Coordinate(request.getLng(), request.getLat())));
-        location.setServiceCategory(request.getCategory());
+        location.getCategories().clear();
+        location.getCategories().addAll(request.getCategories());
 
         location = locationRepository.save(location);
         return toResponse(location);
@@ -75,7 +76,7 @@ public class LocationService {
     @Transactional(readOnly = true)
     public List<LocationResponse> search(Double lat, Double lng, Double radius,
                                           Double minLat, Double minLng, Double maxLat, Double maxLng,
-                                          ServiceCategory category, String cardType, Boolean works,
+                                          String cardType, Boolean works,
                                           String search) {
         List<Location> locations;
 
@@ -93,8 +94,6 @@ public class LocationService {
             locations = locationRepository.findWithWorkingCards();
         } else if (works != null && !works) {
             locations = locationRepository.findWithNoWorkingCards();
-        } else if (category != null) {
-            locations = locationRepository.findByServiceCategory(category);
         } else {
             locations = locationRepository.findAll();
         }
@@ -116,7 +115,7 @@ public class LocationService {
                 location.getAddress(),
                 location.getLocation().getY(),
                 location.getLocation().getX(),
-                location.getServiceCategory(),
+                location.getCategories(),
                 location.getCreatedAt(),
                 location.getUpdatedAt(),
                 acceptanceResponses

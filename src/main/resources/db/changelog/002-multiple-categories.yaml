@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: mburgas
+      changes:
+        - sql:
+            sql: CREATE TABLE IF NOT EXISTS location_categories (location_id UUID NOT NULL REFERENCES locations(id) ON DELETE CASCADE, category VARCHAR(50) NOT NULL, PRIMARY KEY (location_id, category))
+
+  - changeSet:
+      id: 7
+      author: mburgas
+      changes:
+        - sql:
+            sql: ALTER TABLE locations DROP COLUMN IF EXISTS service_category

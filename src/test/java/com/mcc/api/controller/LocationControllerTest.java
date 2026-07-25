@@ -35,8 +35,8 @@ class LocationControllerTest {
 
     @Test
     void search_noParams_returnsAll() throws Exception {
-        LocationResponse loc = new LocationResponse(UUID.randomUUID(), "Bar Paco", "Carrer Major 1", 41.38, 2.17, ServiceCategory.BAR, Instant.now(), Instant.now(), List.of());
-        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull()))
+        LocationResponse loc = new LocationResponse(UUID.randomUUID(), "Bar Paco", "Carrer Major 1", 41.38, 2.17, List.of(ServiceCategory.BAR), Instant.now(), Instant.now(), List.of());
+        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull()))
                 .thenReturn(List.of(loc));
 
         mockMvc.perform(get("/locations"))
@@ -45,20 +45,9 @@ class LocationControllerTest {
     }
 
     @Test
-    void search_byCategory() throws Exception {
-        LocationResponse loc = new LocationResponse(UUID.randomUUID(), "Cafe Moka", "Av. Diagonal 100", 41.39, 2.16, ServiceCategory.CAFETERIA, Instant.now(), Instant.now(), List.of());
-        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), eq(ServiceCategory.CAFETERIA), isNull(), isNull(), isNull()))
-                .thenReturn(List.of(loc));
-
-        mockMvc.perform(get("/locations").param("category", "CAFETERIA"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].serviceCategory").value("CAFETERIA"));
-    }
-
-    @Test
     void search_bySearchTerm() throws Exception {
-        LocationResponse loc = new LocationResponse(UUID.randomUUID(), "Bar Paco", "Carrer Major 1", 41.38, 2.17, ServiceCategory.BAR, Instant.now(), Instant.now(), List.of());
-        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), eq("paco")))
+        LocationResponse loc = new LocationResponse(UUID.randomUUID(), "Bar Paco", "Carrer Major 1", 41.38, 2.17, List.of(ServiceCategory.BAR), Instant.now(), Instant.now(), List.of());
+        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), eq("paco")))
                 .thenReturn(List.of(loc));
 
         mockMvc.perform(get("/locations").param("search", "paco"))
@@ -68,7 +57,7 @@ class LocationControllerTest {
 
     @Test
     void search_emptyResults() throws Exception {
-        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull()))
+        when(locationService.search(isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull()))
                 .thenReturn(List.of());
 
         mockMvc.perform(get("/locations"))
@@ -80,7 +69,7 @@ class LocationControllerTest {
     @Test
     void getById_found() throws Exception {
         UUID id = UUID.randomUUID();
-        LocationResponse loc = new LocationResponse(id, "Bar Paco", "Carrer Major 1", 41.38, 2.17, ServiceCategory.BAR, Instant.now(), Instant.now(), List.of());
+        LocationResponse loc = new LocationResponse(id, "Bar Paco", "Carrer Major 1", 41.38, 2.17, List.of(ServiceCategory.BAR), Instant.now(), Instant.now(), List.of());
         when(locationService.getById(id)).thenReturn(loc);
 
         mockMvc.perform(get("/locations/" + id))

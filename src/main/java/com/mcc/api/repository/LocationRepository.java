@@ -1,7 +1,6 @@
 package com.mcc.api.repository;
 
 import com.mcc.api.model.Location;
-import com.mcc.api.model.ServiceCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +19,6 @@ public interface LocationRepository extends JpaRepository<Location, UUID> {
 
     @Query("SELECT l FROM Location l WHERE LOWER(l.name) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Location> searchByName(@Param("search") String search);
-
-    List<Location> findByServiceCategory(ServiceCategory category);
 
     @Query("SELECT DISTINCT l FROM Location l JOIN CardAcceptance ca ON ca.location = l WHERE ca.works = true")
     List<Location> findWithWorkingCards();

@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.locationtech.jts.geom.Point;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,9 +31,11 @@ public class Location {
     @Column(nullable = false, columnDefinition = "GEOGRAPHY(Point, 4326)")
     private Point location;
 
+    @ElementCollection
+    @CollectionTable(name = "location_categories", joinColumns = @JoinColumn(name = "location_id"))
+    @Column(name = "category")
     @Enumerated(EnumType.STRING)
-    @Column(name = "service_category", nullable = false)
-    private ServiceCategory serviceCategory;
+    private List<ServiceCategory> categories = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")

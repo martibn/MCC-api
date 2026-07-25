@@ -2,7 +2,6 @@ package com.mcc.api.controller;
 
 import com.mcc.api.dto.request.LocationRequest;
 import com.mcc.api.dto.response.LocationResponse;
-import com.mcc.api.model.ServiceCategory;
 import com.mcc.api.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +29,10 @@ public class LocationController {
             @RequestParam(required = false) Double minLng,
             @RequestParam(required = false) Double maxLat,
             @RequestParam(required = false) Double maxLng,
-            @RequestParam(required = false) ServiceCategory category,
             @RequestParam(required = false) String cardType,
             @RequestParam(required = false) Boolean works,
             @RequestParam(required = false) String search) {
-        return ResponseEntity.ok(locationService.search(lat, lng, radius, minLat, minLng, maxLat, maxLng, category, cardType, works, search));
+        return ResponseEntity.ok(locationService.search(lat, lng, radius, minLat, minLng, maxLat, maxLng, cardType, works, search));
     }
 
     @PostMapping
