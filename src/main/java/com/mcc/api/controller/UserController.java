@@ -69,8 +69,11 @@ public class UserController {
         String currentPassword = body.get("currentPassword");
         String newPassword = body.get("newPassword");
 
-        if (currentPassword == null || newPassword == null || newPassword.length() < 6) {
-            return ResponseEntity.badRequest().body(Map.of("error", "New password must be at least 6 characters"));
+        if (currentPassword == null || newPassword == null || newPassword.length() < 8) {
+            return ResponseEntity.badRequest().body(Map.of("error", "New password must be at least 8 characters"));
+        }
+        if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password must contain at least one uppercase letter, one lowercase letter, and one digit"));
         }
 
         if (user.getPasswordHash() == null) {

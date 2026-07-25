@@ -45,7 +45,7 @@ class AuthControllerTest {
 
         RegisterRequest request = new RegisterRequest();
         request.setEmail("test@example.com");
-        request.setPassword("password123");
+        request.setPassword("Password123");
         request.setName("Test");
 
         mockMvc.perform(post("/auth/register")
@@ -61,7 +61,7 @@ class AuthControllerTest {
     void register_invalidEmail() throws Exception {
         RegisterRequest request = new RegisterRequest();
         request.setEmail("not-an-email");
-        request.setPassword("password123");
+        request.setPassword("Password123");
         request.setName("Test");
 
         mockMvc.perform(post("/auth/register")
@@ -87,7 +87,7 @@ class AuthControllerTest {
 
         RegisterRequest request = new RegisterRequest();
         request.setEmail("existing@example.com");
-        request.setPassword("password123");
+        request.setPassword("Password123");
         request.setName("Test");
 
         mockMvc.perform(post("/auth/register")
