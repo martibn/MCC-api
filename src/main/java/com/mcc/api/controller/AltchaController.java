@@ -17,7 +17,7 @@ public class AltchaController {
     private final AltchaService altchaService;
 
     @GetMapping("/challenge")
-    public ResponseEntity<Map<String, String>> getChallenge() {
-        return ResponseEntity.ok(Map.of("challenge", altchaService.generateChallenge()));
+    public ResponseEntity<Map<String, Object>> getChallenge() {
+        return ResponseEntity.ok(altchaService.generateChallenge());
     }
 }

@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HexFormat;
+import java.util.Map;
 
 @Service
 public class AltchaService {
@@ -18,7 +19,7 @@ public class AltchaService {
     @Value("${altcha.hmac-key:default-altcha-hmac-key-change-in-production}")
     private String hmacKey;
 
-    public String generateChallenge() {
+    public Map<String, Object> generateChallenge() {
         try {
             SecureRandom rng = new SecureRandom();
             byte[] saltBytes = new byte[16];
@@ -32,7 +33,13 @@ public class AltchaService {
             byte[] sigBytes = mac.doFinal(challenge.getBytes("UTF-8"));
             String signature = Base64.getUrlEncoder().withoutPadding().encodeToString(sigBytes);
 
-            return "{\"algorithm\":\"SHA-256\",\"challenge\":\"" + challenge + "\",\"salt\":\"" + salt + "\",\"maxnumber\":" + MAX_NUMBER + ",\"signature\":\"" + signature + "\"}";
+            return Map.of(
+                "algorithm", "SHA-256",
+                "challenge", challenge,
+                "salt", salt,
+                "maxnumber", MAX_NUMBER,
+                "signature", signature
+            );
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate ALTCHA challenge", e);
         }
